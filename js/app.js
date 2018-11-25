@@ -1,7 +1,3 @@
-/*
-* Create a list that holds all of your cards
-*/
-
 let cards = $('.card');
 let stars = $('.stars');
 let starsCount = 3;
@@ -9,14 +5,6 @@ let score = 0;
 let timer = 0;
 let timerId = 0;
 let moves = 0;
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
-// Shuffle function from http://stackoverflow.com/a/2450976
 
 function shuffleArray(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -43,70 +31,68 @@ function shuffle() {
 
 shuffle();
 
-/*
-* set up the event listener for a card. If a card is clicked:
-*  - display the card's symbol (put this functionality in another function that you call from this one)
-*  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
-*  - if the list already has another card, check to see if the two cards match
-*    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
 let clickedCard = null;
 
 $('.restart').click(function () {
     startNewGame();
 });
 
-
-
 function addClickEvent() {
     $('.card').click(function (e) {
         if (e.target.className != 'card') return;
-        if (clickedCard == null) {
+        if (clickedCard === null) {
             clickedCard = e.target;
             clickedCard.className = "card open show";
         }
         else {
             moves++;
             $('.moves').text(moves);
-            if (clickedCard.firstElementChild.className == e.target.firstElementChild.className) {
-                clickedCard.className = 'card match';
-                e.target.className = 'card match';
-                score++;
-                verificarSeGanhou();
-                clickedCard = null;
+            if (clickedCard.firstElementChild.className === e.target.firstElementChild.className) {
+                equalCard(e);
             }
             else {
-                e.target.className = "card open show";
-
-                let disbleScreen = document.createElement("div");
-                disbleScreen.className += "overlay";
-                document.body.appendChild(disbleScreen);
-
-                setTimeout(function () {
-                    disbleScreen.parentNode.removeChild(disbleScreen);
-                    clickedCard.className = "card";
-                    e.target.className = "card";
-
-                    removeStar();
-                    clickedCard = null;
-                }, 1000);
-
+                diferentCard(e);
             }
         }
     });
 }
 
+function equalCard(e){
+    clickedCard.className = 'card match';
+    e.target.className = 'card match';
+    score++;
+    verificarSeGanhou();
+    clickedCard = null;
+}
+
+function diferentCard(e){
+    e.target.className = "card open show";
+    desabilitarTela(e);
+}
+
+function desabilitarTela(e){
+    let disbleScreen = document.createElement("div");
+    disbleScreen.className += "overlay";
+    document.body.appendChild(disbleScreen);
+
+    setTimeout(function () {
+        disbleScreen.parentNode.removeChild(disbleScreen);
+        clickedCard.className = "card";
+        e.target.className = "card";
+
+        removeStar();
+        clickedCard = null;
+    }, 1000);
+}
+
 function removeStar() {
     let star = $('.fa-star');
 
-    if (moves == 12){
+    if (moves === 12){
         star[0].remove();
         starsCount--;
     }
-    else if (moves == 20){
+    else if (moves === 20){
         star[0].remove();
         starsCount--;
     }
@@ -130,7 +116,7 @@ function startNewGame() {
 }
 
 function verificarSeGanhou() {
-    if (score == 8) {
+    if (score === 8) {
         winGame();
     }
 }
@@ -139,7 +125,7 @@ function verificarSeGanhou() {
 function winGame() {
     clearInterval(timerId);
     let estrelas;
-    if (starsCount == 1)
+    if (starsCount === 1)
         estrelas = 'estrelinha';
     else
         estrelas = 'estrelinhas';
