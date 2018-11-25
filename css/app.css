@@ -146,3 +146,47 @@ h1 {
     opacity: 1; 
     filter: alpha(opacity=100);
 }
+
+/* Media queries */
+
+@media only screen and (max-width: 700px) {
+    h1 {
+        font-size: 60px;
+        text-align: center;
+    }
+    .deck {
+        width: 410px;
+        min-height: 410px;
+        margin-bottom: 0;
+        padding: 20px;
+    }    
+ 
+    .deck .card {
+        width: 84px;
+        height: 84px;
+    } 
+    .score-panel {
+        width :unset !important;
+        
+        font-size: 20px;
+        flex-direction: column;
+        justify-content: center;
+
+    }
+}
+ @media only screen and (max-width: 450px) {
+    h1 {
+        font-size: 50px;
+        margin: 0;
+    }
+    .deck {
+        width: 310px;
+        min-height: 310px;
+        padding: 20px;
+    }    
+ 
+    .deck .card {
+        width: 64px;
+        height: 64px;
+    } 
+} 
